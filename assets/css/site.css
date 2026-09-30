@@ -69,28 +69,19 @@
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   color-scheme: light;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --paper: #1d1712; --paper-deep: #251d16; --paper-lift: #2b2219;
-    --ink: #ecdfc4; --ink-soft: #c2af90; --ink-faint: #9c8a70;
-    --rule: #4b3d2e; --rule-soft: #3a2f24;
-    --wax: #e0987a; --wax-soft: rgba(224, 152, 122, 0.12); --wax-line: rgba(224, 152, 122, 0.5);
-    --mark: rgba(214, 160, 70, 0.28);
-    --shadow: 0 1px 0 rgba(255, 230, 190, 0.04) inset, 0 18px 40px -24px rgba(0, 0, 0, 0.8);
-    --scrim: rgba(8, 6, 4, 0.6); --grain-opacity: 0.22;
-    --scroll-track: #221b15; --scroll-thumb: #5a4935; --scroll-thumb-hover: #7d6549;
-    color-scheme: dark;
-  }
-}
+/* Daylight (parchment) is the default for every visitor. Candlelight applies only when chosen:
+   the moon button, or a host page that sets data-theme="dark" explicitly. */
+/* Candlelight palette "Walnut" (chosen 2026-09-30 from three lighter browns; all text pairs pass WCAG AA).
+   Alternatives kept in tests/tools/palettes.mjs: Saddle Leather (red-brown), Tobacco Leaf (golden-brown). */
 :root[data-theme="dark"] {
-  --paper: #1d1712; --paper-deep: #251d16; --paper-lift: #2b2219;
-  --ink: #ecdfc4; --ink-soft: #c2af90; --ink-faint: #9c8a70;
-  --rule: #4b3d2e; --rule-soft: #3a2f24;
-  --wax: #e0987a; --wax-soft: rgba(224, 152, 122, 0.12); --wax-line: rgba(224, 152, 122, 0.5);
-  --mark: rgba(214, 160, 70, 0.28);
-  --shadow: 0 1px 0 rgba(255, 230, 190, 0.04) inset, 0 18px 40px -24px rgba(0, 0, 0, 0.8);
-  --scrim: rgba(8, 6, 4, 0.6); --grain-opacity: 0.22;
-  --scroll-track: #221b15; --scroll-thumb: #5a4935; --scroll-thumb-hover: #7d6549;
+  --paper: #3b2f25; --paper-deep: #45372b; --paper-lift: #4c3d30;
+  --ink: #f3e8d3; --ink-soft: #d8c7aa; --ink-faint: #bca98a;
+  --rule: #6d5945; --rule-soft: #574738;
+  --wax: #f6b193; --wax-soft: rgba(246, 177, 147, 0.13); --wax-line: rgba(246, 177, 147, 0.55);
+  --mark: rgba(226, 178, 90, 0.30);
+  --shadow: 0 1px 0 rgba(255, 236, 205, 0.05) inset, 0 18px 40px -24px rgba(10, 6, 2, 0.7);
+  --scrim: rgba(18, 12, 7, 0.55); --grain-opacity: 0.25;
+  --scroll-track: #33291f; --scroll-thumb: #7a6450; --scroll-thumb-hover: #957b62;
   color-scheme: dark;
 }
 
@@ -288,10 +279,10 @@ h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: 1.12; t
 .p.debated { cursor: pointer; border-radius: 2px; transition: background-color .25s var(--ease); }
 .p.debated::after {
   content: ""; position: absolute; left: -14px; top: 0.35em; bottom: 0.35em; width: 2px; border-radius: 2px;
-  background: var(--wax-line); transition: background-color .2s, width .2s;
+  background: var(--wax-line); transform-origin: left center; transition: background-color .2s, transform .2s var(--ease);
 }
 .p.debated:hover { background-color: var(--wax-soft); }
-.p.debated:hover::after, .p.debated.is-open::after { background: var(--wax); width: 3px; }
+.p.debated:hover::after, .p.debated.is-open::after { background: var(--wax); transform: scaleX(1.5); }
 .p.debated.is-open { background-color: var(--wax-soft); box-shadow: -8px 0 0 var(--wax-soft), 8px 0 0 var(--wax-soft); }
 .p .cite {
   position: absolute; right: calc(100% + 16px); top: 0.3em; width: 150px; text-align: right; font-family: var(--ui); font-size: var(--step--2);
@@ -411,9 +402,9 @@ h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: 1.12; t
 .reader .byline { font-family: var(--ui); font-size: var(--step--1); color: var(--ink-soft); margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; }
 .text { max-width: 68ch; margin-top: 30px; font-size: var(--reader-size); }
 .text p { margin: 0 0 1em; line-height: 1.72; hyphens: manual; text-wrap: pretty; }
-.text .q { margin: 0 0 1em; padding-left: 1.4em; border-left: 2px solid var(--rule-soft); }
+.text .q { margin: 0 0 1em; padding-left: 2em; } /* indented, as the printed edition sets quoted matter */
 .text .n { font-family: var(--ui); font-size: var(--step--1); color: var(--ink-soft); background: var(--paper-deep); padding: 10px 12px; border-radius: var(--radius); line-height: 1.5; }
-.text .n::before { content: "Editor's note in this edition. "; font-weight: 600; }
+.text .n::before { content: "Editor's Note in This Edition. "; font-weight: 600; }
 .text .h { font-family: var(--display); font-size: var(--step-1); margin: 1.4em 0 0.6em; text-align: left; }
 .text .spk { font-weight: 700; }
 .text p.focus-person { background: var(--wax-soft); box-shadow: -10px 0 0 var(--wax-soft), 10px 0 0 var(--wax-soft); }
@@ -490,7 +481,8 @@ mark { background: var(--mark); color: inherit; border-radius: 2px; box-shadow: 
   .doc-layout, .doc-layout.has-gloss { grid-template-columns: minmax(0, 1fr); }
   .toc { display: none; }
   .gloss {
-    position: fixed; z-index: 40; left: 0; right: 0; bottom: 0; top: auto; max-height: min(88vh, calc(100% - 40px)); height: auto;
+    position: fixed; z-index: 40; left: 0; right: 0; bottom: 0; top: auto; height: auto;
+    max-height: calc(100vh - 170px); max-height: calc(100dvh - 170px); /* leaves a band of scrim to tap closed */
     border-radius: 14px 14px 0 0; border-left: 0; border-right: 0; border-bottom: 0;
     padding-bottom: env(safe-area-inset-bottom, 0px); animation: sheet-in .35s var(--ease);
   }

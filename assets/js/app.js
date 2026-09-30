@@ -173,29 +173,29 @@
 
   // ---------------------------------------------------------------- labels
   var SIDES = [
-    ["draft", "Drafting record"], ["congress", "In Congress"], ["convention", "In the Federal Convention"],
-    ["federalist", "In defense of the Constitution"], ["antifederalist", "In opposition"],
-    ["ratifying_convention", "State ratifying conventions"], ["correspondence", "Letters"],
-    ["other", "Related writings"], ["later", "Later recollections"]
+    ["draft", "Drafting Record"], ["congress", "In Congress"], ["convention", "In the Federal Convention"],
+    ["federalist", "In Defense of the Constitution"], ["antifederalist", "In Opposition"],
+    ["ratifying_convention", "State Ratifying Conventions"], ["correspondence", "Letters"],
+    ["other", "Related Writings"], ["later", "Later Recollections"]
   ];
   var SIDE_SHORT = { draft: "Drafts", congress: "Congress", convention: "Convention", federalist: "Federalist",
     antifederalist: "Anti-Federalist", ratifying_convention: "Ratifying", correspondence: "Letters", other: "Related", later: "Later" };
-  var REL = { direct_discussion: "Discusses this passage", explicit_response: "Direct reply", same_debate: "Same controversy",
-    thematic: "Related idea", drafting_history: "Drafting history" };
+  var REL = { direct_discussion: "Discusses This Passage", explicit_response: "Direct Reply", same_debate: "Same Controversy",
+    thematic: "Related Idea", drafting_history: "Drafting History" };
   var STATUS = {
-    official_transcription: ["Official transcription", "Transcribed by the National Archives from the original document."],
-    digital_transcription: ["Digital transcription", "Keyed transcription of a printed edition. Not checked against the manuscript or first printing."],
+    official_transcription: ["Official Transcription", "Transcribed by the National Archives from the original document."],
+    digital_transcription: ["Digital Transcription", "Keyed transcription of a printed edition. Not checked against the manuscript or first printing."],
     unreviewed_ocr: ["Unreviewed OCR", "Machine-read text of a scanned book. Expect misread letters (for example \"8c\" for \"&\"). Check the scan before quoting."]
   };
   var ROLE_LABEL = {
     declaration_signer: "Signed the Declaration", constitution_signer: "Signed the Constitution",
-    convention_nonsigner: "Convention delegate, did not sign", declaration_committee_of_five: "Committee of Five",
-    articles_drafting_committee: "Articles of Confederation committee"
+    convention_nonsigner: "Convention Delegate, Did Not Sign", declaration_committee_of_five: "Committee of Five",
+    articles_drafting_committee: "Articles of Confederation Committee"
   };
   var TAB_OF_KIND = { letter: "letters", diary: "letters", notes: "papers", essay: "essays", pamphlet: "essays", sermon: "essays",
     poem: "essays", address: "essays", book: "essays", memoir: "essays", biography: "essays", speech: "speeches",
     official: "papers", resolution: "papers", report: "papers", petition: "papers", draft: "papers" };
-  var TAB_LABEL = { letters: "Letters & diaries", essays: "Essays & pamphlets", speeches: "Speeches", papers: "Papers & notes" };
+  var TAB_LABEL = { letters: "Letters & Diaries", essays: "Essays & Pamphlets", speeches: "Speeches", papers: "Papers & Notes" };
 
   function statusChip(st) {
     var s = STATUS[st] || STATUS.digital_transcription;
@@ -276,7 +276,7 @@
     var img = CORE.images;
     var hero = h("section", { class: "home-hero" },
       h("div", null,
-        h("h1", { class: "h-doc" }, "Read the founding documents with the ", h("em", { text: "arguments" }), " behind every line"),
+        h("h1", { class: "h-doc" }, "Read the Founding Documents With the ", h("em", { text: "Arguments" }), " Behind Every Line"),
         h("p", { class: "lede", text: "Open any marked clause to see what delegates, pamphleteers and newspaper essayists said about it in 1787 and 1788. Tap a signer's name to read their own letters and writings." }),
         h("div", { class: "home-cta" },
           h("a", { class: "btn", href: "#constitution" }, icon("scroll"), "Read the Constitution"),
@@ -293,18 +293,18 @@
       faces.appendChild(h("a", { class: "face", role: "listitem", href: "#person~" + pid }, portrait(pid), h("span", { text: p.n })));
     });
     var strip = h("section", { class: "strip" },
-      h("div", { class: "strip-head" }, h("h2", { class: "h-sec", text: "The signers of the Declaration" }),
-        h("a", { class: "link-btn", href: "#signers" }, "All signers and delegates", icon("arrow-right"))),
+      h("div", { class: "strip-head" }, h("h2", { class: "h-sec", text: "The Signers of the Declaration" }),
+        h("a", { class: "link-btn", href: "#signers" }, "All Signers & Delegates", icon("arrow-right"))),
       faces);
     var argued = h("div", { class: "argued" });
     CORE.topDebates.forEach(function (d) {
       argued.appendChild(h("a", { href: "#" + d.doc + "~" + d.anchor },
         h("span", { class: "label", text: d.label }), h("span", { class: "t", text: d.topic }),
-        h("span", { class: "meta", text: d.n + " sources" })));
+        h("span", { class: "meta", text: d.n + " Sources" })));
     });
     var debates = h("section", { class: "strip" },
-      h("div", { class: "strip-head" }, h("h2", { class: "h-sec", text: "Where the argument was sharpest" }),
-        h("a", { class: "link-btn", href: "#debates" }, "Every debated clause", icon("arrow-right"))),
+      h("div", { class: "strip-head" }, h("h2", { class: "h-sec", text: "Where the Argument Was Sharpest" }),
+        h("a", { class: "link-btn", href: "#debates" }, "Every Debated Clause", icon("arrow-right"))),
       argued);
     append(v, [hero, plates, strip, debates]);
   }
@@ -316,8 +316,8 @@
         h("h2", { text: d.title }),
         h("p", { text: blurb }),
         h("div", { class: "facts" },
-          h("span", { class: "chip wax", text: d.debatedCount + " debated passages" }),
-          h("span", { class: "chip", text: d.signerCount + " signers" }))));
+          h("span", { class: "chip wax", text: d.debatedCount + " Debated Passages" }),
+          h("span", { class: "chip", text: d.signerCount + " Signers" }))));
   }
 
   // ---------------------------------------------------------------- documents
@@ -333,8 +333,8 @@
       h("h1", { class: "h-doc", text: d.title }),
       h("div", { class: "meta" },
         h("span", { text: d.source_note }),
-        h("a", { href: d.source_url }, "Source transcription", icon("arrow-square-out")),
-        d.parchment && d.parchment.commons ? h("a", { href: d.parchment.commons }, "View the parchment", icon("arrow-square-out")) : null),
+        h("a", { href: d.source_url }, "Source Transcription", icon("arrow-square-out")),
+        d.parchment && d.parchment.commons ? h("a", { href: d.parchment.commons }, "View the Parchment", icon("arrow-square-out")) : null),
       d.debatedCount ? h("div", { class: "legend" },
         h("span", null, h("b", { class: "sample-d", text: "Passages ruled in the margin" }), " open the record of the argument over them."),
         d.signerCount ? h("span", null, h("b", { class: "sample-p", text: "Dotted names" }), " open a signer's life and writings.") : null) : null);
@@ -348,7 +348,7 @@
         if (p.toc) tocItems.push([p.toc, el, p.tocSub]);
       }
     });
-    if (d.signerGroups && d.signerGroups.length) tocItems.push(["The signers", renderSigners_inDoc(d, docEl)]);
+    if (d.signerGroups && d.signerGroups.length) tocItems.push(["The Signers", renderSigners_inDoc(d, docEl)]);
     if (d.after) d.after.forEach(function (sec) {
       var secHead = h("h2", { class: "art", id: "sec-" + sec.id, text: sec.title });
       docEl.appendChild(secHead);
@@ -488,13 +488,20 @@
     showScrim(false);
   }
   function closeGloss() {
-    if (state.glossFrom === "doc") history.back();
-    else { history.replaceState(null, "", "#" + state.route.view); onRoute(); }
+    var view = state.route.view;
+    var direct = function () { history.replaceState(null, "", "#" + view); onRoute(); };
+    if (state.glossFrom !== "doc") { direct(); return; }
+    var before = location.hash;
+    history.back();
+    // if the previous history entry had the same address, back() changes nothing: close directly
+    setTimeout(function () { if (location.hash === before && glossEl && !glossEl.hidden) direct(); }, 250);
   }
   function showScrim(on) {
     var narrow = window.matchMedia("(max-width: 1080px)").matches;
     if (on && narrow) {
-      if (!scrimEl) { scrimEl = h("div", { class: "scrim", onclick: closeGloss }); document.body.appendChild(scrimEl); }
+      // The scrim must live in the same stacking context as the sheet (inside <main>), or it paints
+      // over the sheet and swallows every tap and scroll meant for it.
+      if (!scrimEl) { scrimEl = h("div", { class: "scrim", onclick: closeGloss }); document.getElementById("main").appendChild(scrimEl); }
       document.body.classList.add("sheet-open");
     } else {
       if (scrimEl) { scrimEl.remove(); scrimEl = null; }
@@ -511,7 +518,7 @@
     var para = CORE.anchorText[anchor];
     inner.appendChild(glossTop(para && para.label ? para.label : "Passage"));
     if (!deb) {
-      inner.appendChild(h("h2", { text: "No recorded debate linked yet" }));
+      inner.appendChild(h("h2", { text: "No Recorded Debate Linked Yet" }));
       inner.appendChild(h("p", { class: "summary", text: "This passage has no sources linked to it in this edition." }));
       return;
     }
@@ -569,7 +576,7 @@
     } else if (e.by) by.push(e.by);
     if (e.dl) by.push((by.length ? ", " : "") + e.dl);
     var foot = h("div", { class: "entry-foot" },
-      h("button", { class: "link-btn", type: "button", onclick: function () { state.highlight = { work: e.w, loc: e.loc, from: location.hash }; go("work~" + e.w); } }, icon("book-open"), "Read in full"),
+      h("button", { class: "link-btn", type: "button", onclick: function () { state.highlight = { work: e.w, loc: e.loc, from: location.hash }; go("work~" + e.w); } }, icon("book-open"), "Read in Full"),
       h("span", { class: "chip", text: REL[e.rel] || "Related" }),
       e.st === "unreviewed_ocr" ? statusChip(e.st) : null);
     return h("article", { class: "entry side-" + e.side },
@@ -589,7 +596,7 @@
       clear(body);
       body.appendChild(bioBlock(P, true));
       body.appendChild(worksBlock(pid, P, 8));
-      body.appendChild(h("p", { class: "more-btn" }, h("a", { class: "btn ghost", href: "#person~" + pid }, "Open " + p.n + "'s page", icon("arrow-right"))));
+      body.appendChild(h("p", { class: "more-btn" }, h("a", { class: "btn ghost", href: "#person~" + pid }, "Open " + p.n + "'s Page", icon("arrow-right"))));
     }).catch(function (e) { clear(body).appendChild(errorBox(e)); });
   }
 
@@ -617,7 +624,7 @@
         var more = h("button", { class: "link-btn", type: "button", "aria-expanded": "false", onclick: function () {
           sec.hidden = !sec.hidden;
           more.setAttribute("aria-expanded", sec.hidden ? "false" : "true");
-        } }, icon("caret-down"), "Also: the sketch from " + b.title);
+        } }, icon("caret-down"), "Also: The Sketch From " + b.title);
         sec.hidden = true;
         box.appendChild(h("p", { class: "bio" }, more));
       }
@@ -629,8 +636,8 @@
         var btn = h("button", { class: "link-btn", type: "button", "aria-expanded": "false", onclick: function () {
           var c = sec.classList.toggle("clamped");
           btn.setAttribute("aria-expanded", c ? "false" : "true");
-          btn.lastChild.textContent = c ? "Read the full sketch" : "Show less";
-        } }, icon("caret-down"), "Read the full sketch");
+          btn.lastChild.textContent = c ? "Read the Full Sketch" : "Show Less";
+        } }, icon("caret-down"), "Read the Full Sketch");
         sec.appendChild(btn);
       }
       box.appendChild(sec);
@@ -647,7 +654,7 @@
       (tabs[t] = tabs[t] || []).push(w);
     });
     if (P.speeches && P.speeches.length) tabs.speeches = (tabs.speeches || []).concat(P.speeches.map(function (s) {
-      return { id: s.day, t: "Speeches in the Convention, " + s.dl, d: s.date, dl: s.dl, k: "notes", sub: s.n + (s.n === 1 ? " remark" : " remarks") + " reported by Madison", speaker: true };
+      return { id: s.day, t: "Speeches in the Convention, " + s.dl, d: s.date, dl: s.dl, k: "notes", sub: s.n + (s.n === 1 ? " Remark" : " Remarks") + " Reported by Madison", speaker: true };
     }));
     var order = ["letters", "essays", "speeches", "papers"].filter(function (t) { return tabs[t] && tabs[t].length; });
     var box = h("section", { class: "writings", "aria-label": "Writings" });
@@ -666,7 +673,7 @@
     });
     var q = "";
     var shown = limit || 60;
-    var search = h("input", { class: "input", type: "search", placeholder: "Filter by title, recipient or year", "aria-label": "Filter writings", id: "filter-" + pid,
+    var search = h("input", { class: "input", type: "search", placeholder: "Filter by Title, Recipient or Year", "aria-label": "Filter writings", id: "filter-" + pid,
       oninput: function () { q = search.value.trim().toLowerCase(); shown = limit || 60; draw(); } });
     function draw() {
       clear(panel);
@@ -684,7 +691,7 @@
       });
       if (!items.length) panel.appendChild(h("p", { class: "empty", text: "No writings match that filter." }));
       panel.appendChild(ul);
-      if (items.length > shown) panel.appendChild(h("button", { class: "btn ghost more-btn", type: "button", onclick: function () { shown += 80; draw(); } }, "Show more (" + (items.length - shown) + " left)"));
+      if (items.length > shown) panel.appendChild(h("button", { class: "btn ghost more-btn", type: "button", onclick: function () { shown += 80; draw(); } }, "Show More (" + (items.length - shown) + " Left)"));
     }
     append(box, [h("h3", { class: "h-sub", text: "Writings" }), tablist, h("div", { class: "list-tools" }, search), panel]);
     draw();
@@ -714,8 +721,8 @@
       if (p.bl) dl.appendChild(dd("Born", p.bl + (P.birthplace ? ", " + P.birthplace : "")));
       if (p.dl) dl.appendChild(dd("Died", p.dl));
       if (P.appearances && P.appearances.length) dl.appendChild(dd("Signed", P.appearances.join("; ")));
-      dl.appendChild(dd("About these texts", "Letters come mainly from Letters of Delegates to Congress (Library of Congress), read by machine from scans. Each text links to its scanned edition."));
-      if (P.finding) dl.appendChild(dd("More of their papers", P.finding.map(function (f, i) { return [i ? ", " : "", h("a", { href: f.url, text: f.title })]; })));
+      dl.appendChild(dd("About These Texts", "Letters come mainly from Letters of Delegates to Congress (Library of Congress), read by machine from scans. Each text links to its scanned edition."));
+      if (P.finding) dl.appendChild(dd("More of Their Papers", P.finding.map(function (f, i) { return [i ? ", " : "", h("a", { href: f.url, text: f.title })]; })));
       aside.appendChild(dl);
     }).catch(function (e) { clear(body).appendChild(errorBox(e)); });
   }
@@ -776,11 +783,11 @@
       var s = STATUS[w.text_status] || STATUS.digital_transcription;
       var dl = h("dl");
       dl.appendChild(dd("Edition", w.edition));
-      dl.appendChild(dd("Source", [h("a", { href: w.source_url, text: hostOf(w.source_url) }), w.scan_url ? [" · ", h("a", { href: w.scan_url, text: "Page scan" })] : null]));
+      dl.appendChild(dd("Source", [h("a", { href: w.source_url, text: hostOf(w.source_url) }), w.scan_url ? [" · ", h("a", { href: w.scan_url, text: "Page Scan" })] : null]));
       if (w.date_type) dl.appendChild(dd("Date", (w.date_label || "Undated") + " (" + w.date_type + ")"));
       if (w.attribution_note) dl.appendChild(dd("Authorship", w.attribution_note));
       if (w.note) dl.appendChild(dd("Context", w.note));
-      if (w.editorial_source_note) dl.appendChild(dd("Editors' source note", w.editorial_source_note));
+      if (w.editorial_source_note) dl.appendChild(dd("Editors' Source Note", w.editorial_source_note));
       append(aside, [dl, h("div", { class: "status-box" + (w.text_status === "unreviewed_ocr" ? "" : " ok") }, h("strong", { text: s[0] + ". " }), s[1],
         w.layout_note ? " " + w.layout_note : "")]);
       if (firstMark) setTimeout(function () { firstMark.scrollIntoView({ block: "center" }); }, 60);
@@ -794,10 +801,10 @@
     var v = newView();
     var mode = arg === "constitution" || arg === "convention" ? arg : "declaration";
     var head = h("header", { class: "doc-head" },
-      h("h1", { class: "h-doc", text: "Signers and delegates" }),
+      h("h1", { class: "h-doc", text: "Signers & Delegates" }),
       h("p", { class: "lede", text: "Fifty-six men signed the Declaration of Independence. Thirty-nine signed the Constitution; sixteen other delegates attended the Convention without signing. Six men signed both." }));
     var tools = h("div", { class: "dir-tools", role: "group", "aria-label": "Show" });
-    [["declaration", "Declaration signers"], ["constitution", "Constitution signers"], ["convention", "All Convention delegates"]].forEach(function (m) {
+    [["declaration", "Declaration Signers"], ["constitution", "Constitution Signers"], ["convention", "All Convention Delegates"]].forEach(function (m) {
       tools.appendChild(h("a", { class: "filter", href: "#signers~" + m[0], "aria-pressed": m[0] === mode ? "true" : "false" }, m[1]));
     });
     append(v, [head, tools]);
@@ -816,12 +823,12 @@
         var p = CORE.people[pid];
         var c = p.c || {};
         var bits = [years(p)];
-        if (c.w) bits.push(c.w.toLocaleString("en-US") + (c.w === 1 ? " writing" : " writings"));
-        if (c.s) bits.push("spoke on " + c.s + (c.s === 1 ? " day" : " days"));
+        if (c.w) bits.push(c.w.toLocaleString("en-US") + (c.w === 1 ? " Writing" : " Writings"));
+        if (c.s) bits.push("Spoke on " + c.s + (c.s === 1 ? " Day" : " Days"));
         grid.appendChild(h("a", { class: "card", href: "#person~" + pid }, portrait(pid), h("span", { class: "nm", text: p.n }), h("span", { class: "sub", text: bits.join(". ") })));
       });
       var n = byState[st].length;
-      v.appendChild(h("section", { class: "dir-state" }, h("h2", null, st, h("span", { class: "meta", text: n + (mode === "convention" ? (n === 1 ? " delegate" : " delegates") : (n === 1 ? " signer" : " signers")) })), grid));
+      v.appendChild(h("section", { class: "dir-state" }, h("h2", null, st, h("span", { class: "meta", text: n + (mode === "convention" ? (n === 1 ? " Delegate" : " Delegates") : (n === 1 ? " Signer" : " Signers")) })), grid));
     });
   }
 
@@ -830,7 +837,7 @@
     setTitle("Debates");
     var v = newView();
     v.appendChild(h("header", { class: "doc-head" },
-      h("h1", { class: "h-doc", text: "Every debated passage" }),
+      h("h1", { class: "h-doc", text: "Every Debated Passage" }),
       h("p", { class: "lede", text: "Each entry links a clause to what was said about it: in the Federal Convention's closed sessions, in the newspaper war over ratification, and in the state conventions. Every quotation was checked by machine against its source text." })));
     var idx = h("div", { class: "debate-index" });
     CORE.debateIndex.forEach(function (grp) {
@@ -853,7 +860,7 @@
     var S = CORE.sources;
     var stats = h("div", { class: "stat-line" });
     S.stats.forEach(function (s) { stats.appendChild(h("div", null, h("b", { text: s[0] }), h("span", { text: s[1] }))); });
-    v.appendChild(h("header", { class: "doc-head wide" }, h("h1", { class: "h-doc", text: "Sources and methods" }),
+    v.appendChild(h("header", { class: "doc-head wide" }, h("h1", { class: "h-doc", text: "Sources & Methods" }),
       h("p", { class: "lede", text: S.lede }), stats));
     var grid = h("div", { class: "sources" });
     S.sections.forEach(function (sec) {
@@ -867,14 +874,14 @@
       grid.appendChild(s);
     });
     v.appendChild(grid);
-    var more = h("section", { class: "strip" }, h("h2", { class: "h-sec", text: "More founding documents" }));
+    var more = h("section", { class: "strip" }, h("h2", { class: "h-sec", text: "More Founding Documents" }));
     var ml = h("div", { class: "home-cta" });
     ["articles", "proposed"].forEach(function (id) { if (CORE.docs[id]) ml.appendChild(h("a", { class: "btn ghost", href: "#" + id, text: CORE.docs[id].title })); });
     more.appendChild(ml);
     v.appendChild(more);
     var cred = h("div", { class: "credits" });
     CORE.portraitCredits.forEach(function (c) { cred.appendChild(h("p", null, h("strong", { text: c.n + ": " }), c.credit + " ", h("a", { href: c.url, text: "Commons" }))); });
-    v.appendChild(h("section", { class: "strip" }, h("h2", { class: "h-sec", text: "Portrait credits" }), cred));
+    v.appendChild(h("section", { class: "strip" }, h("h2", { class: "h-sec", text: "Portrait Credits" }), cred));
   }
 
   // ---------------------------------------------------------------- shared bits
@@ -898,7 +905,7 @@
   function currentTheme() {
     var t = document.documentElement.getAttribute("data-theme");
     if (t) return t;
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    return "light"; // daylight unless candlelight was chosen
   }
   var SIZES = ["1.02rem", "1.13rem", "1.26rem", "1.4rem"];
   function applySize(i) {
@@ -915,11 +922,11 @@
     document.getElementById("theme-btn").addEventListener("click", function () {
       var next = currentTheme() === "dark" ? "light" : "dark";
       applyTheme(next); store_set("theme", next);
-      toast(next === "dark" ? "Candlelight on" : "Daylight on");
+      toast(next === "dark" ? "Candlelight On" : "Daylight On");
     });
     document.getElementById("size-btn").addEventListener("click", function () {
       sz = (sz + 1) % SIZES.length; applySize(sz); store_set("size", String(sz));
-      toast("Text size " + (sz + 1) + " of " + SIZES.length);
+      toast("Text Size " + (sz + 1) + " of " + SIZES.length);
     });
     document.getElementById("skip").addEventListener("click", function (e) { e.preventDefault(); var m = document.getElementById("main"); m.focus(); m.scrollIntoView(); });
     document.addEventListener("keydown", function (e) {
