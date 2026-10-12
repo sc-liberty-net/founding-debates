@@ -324,10 +324,24 @@ h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: 1.12; t
 .gloss-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
 .gloss-close { flex: none; }
 .gloss h2 { font-size: var(--step-2); margin-top: 6px; }
+.gloss-head { position: relative; }
+.grab { display: none; }
 /* Beside the text, the passage itself is visible, so the panel does not repeat it; on phones the
-   panel covers the text, so the quote stays there. */
-@media (min-width: 1081px) { .gloss .clause-quote { display: none; } }
-.gloss .clause-quote { margin: 14px 0 0; padding: 12px 14px; background: var(--paper); border-radius: var(--radius); font-size: var(--step--1); line-height: 1.6; color: var(--ink-soft); max-height: 9.6em; overflow: auto; }
+   panel covers the text, so the passage folds into a dropdown under the header's label. */
+@media (min-width: 1081px) { .gloss .clause-quote, .gloss .quote-toggle { display: none; } }
+.quote-toggle {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 40px; margin: -8px 0 -8px -8px; padding: 8px;
+  border: 0; border-radius: var(--radius); background: transparent; cursor: pointer; text-align: left;
+}
+.quote-toggle .label { color: var(--ink-soft); }
+.quote-toggle .icon { flex: none; color: var(--ink-faint); transition: transform .2s var(--ease); }
+.quote-toggle[aria-expanded="true"] .icon { transform: rotate(180deg); }
+.gloss .clause-quote[hidden] { display: none; }
+.gloss .clause-quote {
+  position: absolute; z-index: 4; left: 0; right: 0; top: 100%; margin: 0; padding: 12px 14px;
+  background: var(--paper); border: 1px solid var(--rule); border-radius: var(--radius); box-shadow: var(--shadow);
+  font-size: var(--step--1); line-height: 1.6; color: var(--ink-soft); max-height: min(14em, 40vh); overflow: auto; overscroll-behavior: contain;
+}
 .gloss .summary { margin: 16px 0 0; font-size: var(--step-0); line-height: 1.6; }
 .gloss .summary-by { display: block; margin-top: 6px; }
 .gloss-sub { margin-top: 34px; padding-top: 22px; border-top: 3px double var(--rule); font-size: var(--step-2); }
@@ -365,6 +379,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: 1.12; t
 .person-card h2 { margin-top: 2px; }
 .person-card .life { font-family: var(--ui); font-size: var(--step--1); color: var(--ink-soft); margin-top: 6px; }
 .roles { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.portrait-note { margin-top: 12px; max-width: 46ch; font-family: var(--ui); font-size: var(--step--2); line-height: 1.45; color: var(--ink-faint); }
 .bio { margin-top: 20px; max-width: 70ch; }
 .writings { max-width: 76ch; }
 .bio p { margin: 0 0 0.9em; line-height: 1.66; }
@@ -454,6 +469,21 @@ mark { background: var(--mark); color: inherit; border-radius: 2px; box-shadow: 
 @media (max-width: 860px) { .debate-rows { grid-template-columns: 1fr; } }
 
 /* ---------- Sources page ---------- */
+/* ---------- Library ---------- */
+.library { display: grid; gap: 0; max-width: 72ch; }
+.lib-item { padding: 26px 0 28px; border-top: 1px solid var(--rule); }
+.lib-item:last-child { border-bottom: 1px solid var(--rule); }
+.lib-title { font-size: var(--step-2); line-height: 1.15; }
+.lib-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin: 8px 0 0; font-family: var(--ui); font-size: var(--step--1); color: var(--ink-soft); }
+.lib-blurb { margin: 12px 0 0; font-size: var(--step-0); line-height: 1.6; }
+.lib-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; margin-top: 16px; }
+.lib-toggle .icon { transition: transform .2s var(--ease); }
+.lib-toggle[aria-expanded="true"] .icon { transform: rotate(180deg); }
+.lib-parts { margin: 14px 0 0; padding-left: 1.6em; display: grid; gap: 6px; font-size: var(--step--1); line-height: 1.45; columns: 1; }
+.lib-parts[hidden] { display: none; }
+.lib-parts a { text-decoration-color: var(--rule); }
+.lib-parts a:hover { color: var(--wax); }
+
 .sources { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px 56px; margin-top: 30px; }
 .sources section h2 { font-size: var(--step-2); margin-bottom: 10px; }
 .sources p, .sources li { font-size: var(--step--1); line-height: 1.6; }
@@ -486,8 +516,16 @@ mark { background: var(--mark); color: inherit; border-radius: 2px; box-shadow: 
     border-radius: 14px 14px 0 0; border-left: 0; border-right: 0; border-bottom: 0;
     padding-bottom: env(safe-area-inset-bottom, 0px); animation: sheet-in .35s var(--ease);
   }
-  .gloss-inner { padding: 8px 18px 28px; }
-  .gloss::before { content: ""; display: block; width: 44px; height: 4px; border-radius: 4px; background: var(--rule); margin: 10px auto 4px; }
+  .gloss.sized { height: var(--sheet-h); max-height: calc(100vh - var(--header-h) - 24px); max-height: calc(100dvh - var(--header-h) - 24px); }
+  .gloss-inner { padding: 0 18px 28px; }
+  /* the header stays pinned to the top of the sheet while its body scrolls */
+  .gloss-head { position: sticky; top: 0; z-index: 3; margin: 0 -18px; padding: 0 18px 10px; background: var(--paper-lift); border-bottom: 1px solid var(--rule); }
+  .gloss-head + h2, .gloss-head + .person-card { margin-top: 14px; }
+  .gloss .clause-quote { left: 12px; right: 12px; }
+  .gloss-top.has-quote > .label { display: none; }
+  .grab { display: block; width: 100%; height: 26px; margin: 0; padding: 0; border: 0; background: transparent; cursor: ns-resize; touch-action: none; }
+  .grab::before { content: ""; display: block; width: 44px; height: 4px; border-radius: 4px; background: var(--rule); margin: 10px auto 0; }
+  .grab:focus-visible::before { background: var(--ink-soft); }
   .scrim { position: fixed; inset: 0; background: var(--scrim); z-index: 35; animation: fade-in .25s ease; }
   body.sheet-open { overflow: hidden; }
 }

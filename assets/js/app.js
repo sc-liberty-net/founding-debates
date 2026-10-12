@@ -86,7 +86,7 @@
   }
 
   // ---------------------------------------------------------------- DOM helpers
-  var ALLOWED_HOSTS = /^(www\.)?(archives\.gov|gutenberg\.org|archive\.org|loc\.gov|tile\.loc\.gov|guides\.loc\.gov|constitution\.org|oll\.libertyfund\.org|commons\.wikimedia\.org|upload\.wikimedia\.org|en\.wikipedia\.org|founders\.archives\.gov|nps\.gov|govinfo\.gov|avalon\.law\.yale\.edu|csac\.history\.wisc\.edu|copyright\.gov|masshist\.org|memory\.loc\.gov|lcweb2\.loc\.gov|catalog\.hathitrust\.org|hdl\.huntington\.org|financial\.gwpapers\.org|edu\.lva\.virginia\.gov)$/;
+  var ALLOWED_HOSTS = /^(www\.)?(archives\.gov|gutenberg\.org|archive\.org|loc\.gov|tile\.loc\.gov|guides\.loc\.gov|constitution\.org|oll\.libertyfund\.org|commons\.wikimedia\.org|upload\.wikimedia\.org|en\.wikipedia\.org|founders\.archives\.gov|nps\.gov|govinfo\.gov|avalon\.law\.yale\.edu|csac\.history\.wisc\.edu|copyright\.gov|masshist\.org|memory\.loc\.gov|lcweb2\.loc\.gov|catalog\.hathitrust\.org|hdl\.huntington\.org|financial\.gwpapers\.org|edu\.lva\.virginia\.gov|quod\.lib\.umich\.edu|en\.wikisource\.org)$/;
   function safeUrl(u) {
     if (typeof u !== "string") return null;
     if (/^#[a-z0-9._~-]*$/.test(u)) return u;
@@ -185,8 +185,10 @@
   var STATUS = {
     official_transcription: ["Official Transcription", "Transcribed by the National Archives from the original document."],
     digital_transcription: ["Digital Transcription", "Keyed transcription of a printed edition. Not checked against the manuscript or first printing."],
-    unreviewed_ocr: ["Unreviewed OCR", "Machine-read text of a scanned book. Expect misread letters (for example \"8c\" for \"&\"). Check the scan before quoting."]
+    unreviewed_ocr: ["Unreviewed OCR", "Machine-read text of a scanned book. Expect misread letters (for example \"8c\" for \"&\"). Check the scan before quoting."],
+    corrected_ocr: ["Corrected OCR", "Machine-read text of a scanned book, with misread words corrected against a second transcription and the printing's spelling kept. Some words are still as the machine read them. Check the scan before quoting."]
   };
+  function isOcr(st) { return st === "unreviewed_ocr" || st === "corrected_ocr"; }
   var ROLE_LABEL = {
     declaration_signer: "Signed the Declaration", constitution_signer: "Signed the Constitution",
     convention_nonsigner: "Convention Delegate, Did Not Sign", declaration_committee_of_five: "Committee of Five",
@@ -199,7 +201,7 @@
 
   function statusChip(st) {
     var s = STATUS[st] || STATUS.digital_transcription;
-    return h("span", { class: "chip" + (st === "unreviewed_ocr" ? " ocr" : ""), title: s[1] }, s[0]);
+    return h("span", { class: "chip" + (isOcr(st) ? " ocr" : ""), title: s[1] }, s[0]);
   }
   function years(p) { return (p.by || "?") + " - " + (p.dy || "?"); }
   function monogram(name) {
@@ -256,6 +258,7 @@
     else if (r.view === "signers") renderSigners(r.arg);
     else if (r.view === "debates") renderDebates();
     else if (r.view === "sources") renderSources();
+    else if (r.view === "library") renderLibrary();
     else if (r.view === "person" && CORE.people[r.arg]) renderPerson(r.arg);
     else if (r.view === "work" && r.arg) renderWork(r.arg);
     else renderHome();
@@ -444,6 +447,8 @@
     document.querySelectorAll(".p.is-open, .name-btn.is-open").forEach(function (x) { x.classList.remove("is-open"); });
     layout.classList.add("has-gloss");
     glossEl.hidden = false;
+    quoteOpen = null;
+    applySheetH();
     showScrim(true);
     var inner = h("div", { class: "gloss-inner" });
     clear(glossEl).appendChild(inner);
@@ -484,6 +489,7 @@
     if (layout) layout.classList.remove("has-gloss");
     var g = document.getElementById("gloss");
     if (g) { g.hidden = true; clear(g); }
+    quoteOpen = null;
     document.querySelectorAll(".p.is-open, .name-btn.is-open").forEach(function (x) { x.classList.remove("is-open"); });
     showScrim(false);
   }
@@ -508,22 +514,86 @@
       document.body.classList.remove("sheet-open");
     }
   }
-  function glossTop(labelText) {
-    return h("div", { class: "gloss-top" }, h("span", { class: "label", text: labelText }),
-      h("button", { class: "tool-btn gloss-close", type: "button", "aria-label": "Close", onclick: closeGloss }, icon("x")));
+  // The panel's header: on a phone it stays pinned to the top of the sheet, carries the grab handle,
+  // and folds the passage into a dropdown under the label (beside the text the passage is visible, so
+  // the dropdown is hidden there).
+  function glossTop(labelText, quote) {
+    var top = h("div", { class: "gloss-top" + (quote ? " has-quote" : "") }, h("span", { class: "label", text: labelText }));
+    var panel = null;
+    if (quote) {
+      panel = h("div", { class: "clause-quote", id: "gloss-quote", hidden: true }, quote);
+      var btn = h("button", { class: "quote-toggle", type: "button", "aria-expanded": "false", "aria-controls": "gloss-quote",
+        onclick: function () { if (quoteOpen) closeQuote(); else { panel.hidden = false; btn.setAttribute("aria-expanded", "true"); quoteOpen = { btn: btn, panel: panel }; } } },
+        h("span", { class: "label", text: labelText }), icon("caret-down"));
+      top.appendChild(btn);
+    }
+    top.appendChild(h("button", { class: "tool-btn gloss-close", type: "button", "aria-label": "Close", onclick: closeGloss }, icon("x")));
+    return h("div", { class: "gloss-head" }, grabHandle(), top, panel);
+  }
+  var quoteOpen = null; // the passage dropdown while it is open: { btn, panel }
+  function closeQuote() {
+    if (!quoteOpen) return;
+    quoteOpen.panel.hidden = true;
+    quoteOpen.btn.setAttribute("aria-expanded", "false");
+    quoteOpen = null;
+  }
+
+  // Phone sheet height: the reader drags the handle to set it, and it is kept until the page reloads.
+  // A drag that ends low enough closes the sheet, as on a phone's own sheets.
+  var sheetH = null;
+  function sheetMax() {
+    var mast = document.querySelector(".masthead");
+    return Math.max(200, window.innerHeight - (mast ? mast.getBoundingClientRect().bottom : 64) - 24); // keeps a band of scrim to tap closed
+  }
+  function applySheetH() {
+    var g = document.getElementById("gloss");
+    if (!g) return;
+    if (sheetH) { g.style.setProperty("--sheet-h", Math.min(sheetH, sheetMax()) + "px"); g.classList.add("sized"); }
+    else { g.style.removeProperty("--sheet-h"); g.classList.remove("sized"); }
+  }
+  function setSheetH(px) { sheetH = Math.round(Math.min(sheetMax(), Math.max(160, px))); applySheetH(); }
+  function grabHandle() {
+    var startY = 0, startH = 0, dragging = false, moved = false;
+    var grab = h("button", { class: "grab", type: "button", "aria-label": "Resize Panel", title: "Drag to Resize",
+      onpointerdown: function (e) {
+        if (e.button > 0) return;
+        dragging = true; moved = false; startY = e.clientY; startH = glossEl.getBoundingClientRect().height;
+        try { grab.setPointerCapture(e.pointerId); } catch (x) { /* capture is a nicety */ }
+      },
+      onpointermove: function (e) {
+        if (!dragging) return;
+        if (Math.abs(e.clientY - startY) > 4) moved = true;
+        if (moved) setSheetH(startH + startY - e.clientY);
+      },
+      onpointerup: function (e) {
+        if (!dragging) return;
+        dragging = false;
+        if (moved && startH + startY - e.clientY < 120) { sheetH = null; closeGloss(); }
+      },
+      onpointercancel: function () { dragging = false; },
+      // a tap (or Enter) toggles between full height and a little over half
+      onclick: function () {
+        if (moved) { moved = false; return; }
+        var max = sheetMax();
+        setSheetH(glossEl.getBoundingClientRect().height >= max - 8 ? max * 0.55 : max);
+      },
+      onkeydown: function (e) {
+        var step = e.key === "ArrowUp" ? 48 : e.key === "ArrowDown" ? -48 : 0;
+        if (step) { e.preventDefault(); setSheetH(glossEl.getBoundingClientRect().height + step); }
+      } });
+    return grab;
   }
 
   function renderClauseGloss(inner, docId, anchor) {
     var deb = CORE.debated[anchor];
     var para = CORE.anchorText[anchor];
-    inner.appendChild(glossTop(para && para.label ? para.label : "Passage"));
+    inner.appendChild(glossTop(para && para.label ? para.label : "Passage", deb && para ? para.t : null));
     if (!deb) {
       inner.appendChild(h("h2", { text: "No Recorded Debate Linked Yet" }));
       inner.appendChild(h("p", { class: "summary", text: "This passage has no sources linked to it in this edition." }));
       return;
     }
     inner.appendChild(h("h2", { text: deb.topic }));
-    if (para) inner.appendChild(h("div", { class: "clause-quote", text: para.t }));
     var body = h("div", { class: "gloss-body" }, skeleton(5));
     inner.appendChild(body);
     need("debates").then(function (D) {
@@ -578,7 +648,7 @@
     var foot = h("div", { class: "entry-foot" },
       h("button", { class: "link-btn", type: "button", onclick: function () { state.highlight = { work: e.w, loc: e.loc, from: location.hash }; go("work~" + e.w); } }, icon("book-open"), "Read in Full"),
       h("span", { class: "chip", text: REL[e.rel] || "Related" }),
-      e.st === "unreviewed_ocr" ? statusChip(e.st) : null);
+      isOcr(e.st) ? statusChip(e.st) : null);
     return h("article", { class: "entry side-" + e.side },
       h("div", { class: "entry-head" }, h("span", { class: "entry-title", text: e.title }), h("span", { class: "entry-by" }, by)),
       h("blockquote", null, renderInline(e.ex)),
@@ -612,7 +682,8 @@
       h("div", null,
         big ? h("h1", { class: "h-sec", text: p.n }) : h("h2", { text: p.n }),
         h("div", { class: "life", text: life.join(". ") }),
-        roles));
+        roles,
+        big && p.img && p.pn ? h("p", { class: "portrait-note", text: p.pn }) : null));
   }
 
   function bioBlock(P, clamp) {
@@ -687,7 +758,7 @@
         } },
           h("span", { class: "wd", text: w.dl || w.d || "Undated" }),
           h("span", null, h("span", { class: "wt", text: w.t }),
-            h("span", { class: "ws", text: [w.rc ? "To " + w.rc : "", w.sub || "", w.st === "unreviewed_ocr" ? "Unreviewed OCR" : ""].filter(Boolean).join(". ") })))));
+            h("span", { class: "ws", text: [w.rc ? "To " + w.rc : "", w.sub || "", isOcr(w.st) ? STATUS[w.st][0] : ""].filter(Boolean).join(". ") })))));
       });
       if (!items.length) panel.appendChild(h("p", { class: "empty", text: "No writings match that filter." }));
       panel.appendChild(ul);
@@ -788,7 +859,7 @@
       if (w.attribution_note) dl.appendChild(dd("Authorship", w.attribution_note));
       if (w.note) dl.appendChild(dd("Context", w.note));
       if (w.editorial_source_note) dl.appendChild(dd("Editors' Source Note", w.editorial_source_note));
-      append(aside, [dl, h("div", { class: "status-box" + (w.text_status === "unreviewed_ocr" ? "" : " ok") }, h("strong", { text: s[0] + ". " }), s[1],
+      append(aside, [dl, h("div", { class: "status-box" + (isOcr(w.text_status) ? "" : " ok") }, h("strong", { text: s[0] + ". " }), s[1],
         w.layout_note ? " " + w.layout_note : "")]);
       if (firstMark) setTimeout(function () { firstMark.scrollIntoView({ block: "center" }); }, 60);
     }).catch(function (e) { clear(body).appendChild(errorBox(e)); });
@@ -851,6 +922,41 @@
       idx.appendChild(h("section", null, h("h2", { text: grp.title }), rows));
     });
     v.appendChild(idx);
+  }
+
+  // ---------------------------------------------------------------- library
+  // Writings in print before and during the founding, each readable in full; long works fold their parts away.
+  function renderLibrary() {
+    setTitle("Library");
+    var v = newView();
+    var L = CORE.library;
+    v.appendChild(h("header", { class: "doc-head" }, h("h1", { class: "h-doc", text: "Library" }), h("p", { class: "lede", text: L.lede })));
+    var shelf = h("div", { class: "library" });
+    L.shelf.forEach(function (b) {
+      var many = b.parts.length > 1;
+      var item = h("article", { class: "lib-item", id: "lib-" + b.key },
+        h("h2", { class: "lib-title", text: b.title }),
+        h("p", { class: "lib-meta" }, h("span", { text: b.by + ". " + b.years + "." }), statusChip(b.st),
+          many ? h("span", { class: "meta", text: b.parts.length + " Parts" }) : null),
+        h("p", { class: "lib-blurb", text: b.blurb }));
+      var actions = h("div", { class: "lib-actions" },
+        h("a", { class: "btn ghost", href: "#work~" + b.parts[0][0] }, many ? "Read From the Beginning" : "Read in Full", icon("arrow-right")));
+      if (many) {
+        var list = h("ol", { class: "lib-parts", id: "lib-parts-" + b.key, hidden: true });
+        b.parts.forEach(function (p) { list.appendChild(h("li", null, h("a", { href: "#work~" + p[0], text: p[1] }))); });
+        var toggle = h("button", { class: "link-btn lib-toggle", type: "button", "aria-expanded": "false", "aria-controls": "lib-parts-" + b.key,
+          onclick: function () {
+            var open = list.hidden;
+            list.hidden = !open;
+            toggle.setAttribute("aria-expanded", open ? "true" : "false");
+            toggle.lastChild.textContent = open ? "Hide the Parts" : "Show All " + b.parts.length + " Parts";
+          } }, icon("caret-down"), h("span", { text: "Show All " + b.parts.length + " Parts" }));
+        actions.appendChild(toggle);
+        append(item, [actions, list]);
+      } else item.appendChild(actions);
+      shelf.appendChild(item);
+    });
+    v.appendChild(shelf);
   }
 
   // ---------------------------------------------------------------- sources
@@ -930,8 +1036,11 @@
     });
     document.getElementById("skip").addEventListener("click", function (e) { e.preventDefault(); var m = document.getElementById("main"); m.focus(); m.scrollIntoView(); });
     document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && quoteOpen) { e.preventDefault(); var b = quoteOpen.btn; closeQuote(); b.focus(); return; }
       if (e.key === "Escape" && glossEl && !glossEl.hidden) { e.preventDefault(); closeGloss(); }
     });
+    // a click anywhere outside the open passage dropdown folds it away
+    document.addEventListener("click", function (e) { if (quoteOpen && !quoteOpen.panel.contains(e.target) && !quoteOpen.btn.contains(e.target)) closeQuote(); }, true);
     window.addEventListener("hashchange", function () { state.cameInternal = true; onRoute(); });
     need("core").then(function (c) {
       ["people", "docs", "debated", "superseded", "anchorText", "chunks", "images"].forEach(function (k) { c[k] = dict(c[k]); });
