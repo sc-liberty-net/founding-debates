@@ -1041,6 +1041,17 @@
     });
     // a click anywhere outside the open passage dropdown folds it away
     document.addEventListener("click", function (e) { if (quoteOpen && !quoteOpen.panel.contains(e.target) && !quoteOpen.btn.contains(e.target)) closeQuote(); }, true);
+    // ink-stroke: a fresh quill stroke for each hover or keyboard focus, never the same one twice running
+    function inkPick(e) {
+      var el = e.target.closest && e.target.closest(".nav a, .btn.ghost, .filter, .tool-btn");
+      if (!el || (e.relatedTarget && el.contains(e.relatedTarget))) return;
+      if (el.getAttribute("aria-current") === "page" || el.getAttribute("aria-pressed") === "true") return;
+      var last = el.getAttribute("data-ink"), n;
+      do { n = String(1 + Math.floor(Math.random() * 4)); } while (n === last);
+      el.setAttribute("data-ink", n);
+    }
+    document.addEventListener("pointerover", inkPick);
+    document.addEventListener("focusin", inkPick);
     window.addEventListener("hashchange", function () { state.cameInternal = true; onRoute(); });
     need("core").then(function (c) {
       ["people", "docs", "debated", "superseded", "anchorText", "chunks", "images"].forEach(function (k) { c[k] = dict(c[k]); });

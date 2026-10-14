@@ -94,7 +94,7 @@ html { scrollbar-color: var(--scroll-thumb) var(--scroll-track); }
 .gloss, .clause-quote, .toc { scrollbar-color: var(--scroll-thumb) transparent; }
 ::-webkit-scrollbar { width: 12px; height: 12px; }
 ::-webkit-scrollbar-track { background: var(--scroll-track); }
-::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: 999px; border: 3px solid var(--scroll-track); }
+::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: var(--radius); border: 3px solid var(--scroll-track); }
 ::-webkit-scrollbar-thumb:hover { background: var(--scroll-thumb-hover); }
 ::-webkit-scrollbar-corner { background: var(--scroll-track); }
 .gloss::-webkit-scrollbar-track, .clause-quote::-webkit-scrollbar-track { background: transparent; }
@@ -143,16 +143,16 @@ sup { font-size: 0.66em; line-height: 0; }
 .nav::-webkit-scrollbar { display: none; }
 .nav a {
   font-family: var(--ui); font-size: var(--step--1); font-weight: 500; text-decoration: none; white-space: nowrap;
-  padding: 8px 12px; border-radius: 999px; color: var(--ink-soft);
+  position: relative; padding: 4px 12px 12px; color: var(--ink-soft);
 }
-.nav a:hover { color: var(--ink); background: var(--wax-soft); }
-.nav a[aria-current="page"] { color: var(--ink); background: var(--paper-deep); box-shadow: inset 0 0 0 1px var(--rule); }
+.nav a:hover { color: var(--ink); }
+.nav a[aria-current="page"] { color: var(--ink); }
 .tools { display: flex; gap: 4px; }
 .tool-btn {
-  display: inline-grid; place-items: center; width: 38px; height: 38px; border-radius: 999px;
+  display: inline-grid; place-items: center; width: 38px; height: 38px; position: relative;
   border: 1px solid transparent; background: transparent; cursor: pointer; color: var(--ink-soft);
 }
-.tool-btn:hover { color: var(--ink); border-color: var(--rule); }
+.tool-btn:hover { color: var(--ink); }
 .tool-btn:active { transform: translateY(1px); }
 @media (max-width: 860px) {
   .masthead-inner { flex-wrap: wrap; row-gap: 0; padding-block: 8px 0; }
@@ -176,19 +176,16 @@ h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: 1.12; t
 .rule-orn::before, .rule-orn::after { content: ""; height: 1px; background: var(--rule); flex: 1; }
 .btn {
   display: inline-flex; align-items: center; gap: 8px; font-family: var(--ui); font-size: var(--step--1); font-weight: 600;
-  padding: 10px 16px; border-radius: 999px; border: 1px solid var(--ink); background: var(--ink); color: var(--paper);
-  text-decoration: none; cursor: pointer; white-space: nowrap; transition: transform .15s var(--ease), background .2s;
+  position: relative; padding: 6px 2px 16px; border: 0; background: transparent; color: var(--ink);
+  text-decoration: none; cursor: pointer; white-space: nowrap; transition: transform .15s var(--ease), color .2s;
 }
-.btn:hover { color: var(--paper); background: var(--wax); border-color: var(--wax); }
+.btn:hover { color: var(--wax); }
 .btn:active { transform: translateY(1px); }
-.btn.ghost { background: transparent; color: var(--ink); border-color: var(--rule); }
-.btn.ghost:hover { color: var(--wax); border-color: var(--wax-line); background: var(--wax-soft); }
 .chip {
   display: inline-flex; align-items: center; gap: 6px; font-family: var(--ui); font-size: var(--step--2); font-weight: 600;
-  letter-spacing: 0.02em; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--rule); color: var(--ink-soft); white-space: nowrap;
+  letter-spacing: 0.02em; position: relative; padding: 4px 1px; color: var(--ink-soft); white-space: nowrap;
 }
-.chip.wax { border-color: var(--wax-line); color: var(--wax); background: var(--wax-soft); }
-.chip.ocr { border-style: dashed; }
+.chip.wax { color: var(--wax); }
 
 /* ---------- Home ---------- */
 .home-hero { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: end; padding-block: 12px 8px; }
@@ -290,7 +287,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: 1.12; t
 }
 .p .count {
   display: inline-flex; align-items: center; gap: 4px; margin-left: 6px; font-family: var(--ui); font-size: var(--step--2); font-weight: 600;
-  color: var(--wax); border: 1px solid var(--wax-line); border-radius: 999px; padding: 0 7px; line-height: 1.6; vertical-align: 0.15em; white-space: nowrap;
+  color: var(--wax); position: relative; padding: 1px 1px; line-height: 1.6; vertical-align: 0.15em; white-space: nowrap;
 }
 .p .changed { display: inline-flex; margin-left: 6px; vertical-align: 0.15em; }
 .p.superseded .ptext { color: var(--ink-soft); }
@@ -347,10 +344,10 @@ h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: 1.12; t
 .gloss-sub { margin-top: 34px; padding-top: 22px; border-top: 3px double var(--rule); font-size: var(--step-2); }
 .filters { display: flex; flex-wrap: wrap; gap: 6px; margin: 20px 0 6px; }
 .filter {
-  font-family: var(--ui); font-size: var(--step--2); font-weight: 600; padding: 6px 11px; border-radius: 999px; cursor: pointer;
-  border: 1px solid var(--rule); background: transparent; color: var(--ink-soft);
+  font-family: var(--ui); font-size: var(--step--2); font-weight: 600; padding: 3px 11px 11px; cursor: pointer;
+  position: relative; border: 0; background: transparent; color: var(--ink-soft); text-decoration: none;
 }
-.filter[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.filter:hover, .filter[aria-pressed="true"] { color: var(--ink); }
 .side-group { margin-top: 22px; }
 .side-group > h3 { font-family: var(--ui); font-size: var(--step--2); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); display: flex; gap: 8px; align-items: center; padding-bottom: 8px; border-bottom: 1px solid var(--rule); }
 .side-group > h3 .n { font-variant-numeric: tabular-nums; }
@@ -401,7 +398,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: 1.12; t
 .work-row .ws { display: block; font-family: var(--ui); font-size: var(--step--2); color: var(--ink-faint); margin-top: 2px; }
 .list-tools { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin: 14px 0 6px; }
 .input {
-  font-family: var(--ui); font-size: var(--step--1); padding: 9px 12px; border-radius: 999px; border: 1px solid var(--rule); background: var(--paper);
+  font-family: var(--ui); font-size: var(--step--1); padding: 9px 12px; border-radius: var(--radius); border: 1px solid var(--rule); background: var(--paper);
   color: var(--ink); min-width: 0; flex: 1 1 200px;
 }
 .input::placeholder { color: var(--ink-faint); }
@@ -500,9 +497,52 @@ mark { background: var(--mark); color: inherit; border-radius: 2px; box-shadow: 
 .foot { position: relative; z-index: 1; border-top: 1px solid var(--rule); }
 .foot-inner { max-width: 1480px; margin: 0 auto; padding: 22px var(--gutter) 40px; font-family: var(--ui); font-size: var(--step--2); color: var(--ink-faint); display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
 
+/* ---------- Ink strokes (ink-stroke): the quill underline that replaces every pill shape ----------
+   Clickable things draw a stroke left to right on hover or keyboard focus and, when the pointer leaves,
+   lift it off in the same direction. app.js picks one of the four strokes at random for each hover
+   (data-ink). Whatever is already selected keeps a finished stroke in ink and does not redraw.
+   Labels (chips, passage counts) carry a quiet, permanent stroke. */
+:root {
+  --ink-1: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20200%2020%27%20preserveAspectRatio%3D%27none%27%3E%3Cpath%20d%3D%27M3.1%2016.29L4.9%2015.86%206.6%2015.45%208.4%2015.06%2010.2%2014.69%2012.1%2014.35%2013.9%2014.02%2015.8%2013.72%2017.7%2013.44%2019.6%2013.18%2021.5%2012.94%2023.4%2012.72%2025.3%2012.51%2027.3%2012.33%2029.3%2012.16%2031.3%2012.01%2033.3%2011.87%2035.3%2011.75%2037.3%2011.64%2039.3%2011.55%2041.4%2011.47%2043.5%2011.40%2045.6%2011.35%2047.6%2011.30%2049.8%2011.27%2051.9%2011.25%2054.0%2011.23%2056.1%2011.23%2058.3%2011.23%2060.5%2011.25%2062.6%2011.26%2064.8%2011.29%2067.0%2011.32%2069.2%2011.35%2071.4%2011.39%2073.6%2011.44%2075.9%2011.48%2078.1%2011.53%2080.3%2011.58%2082.6%2011.64%2084.8%2011.69%2087.1%2011.74%2089.4%2011.80%2091.6%2011.85%2093.9%2011.91%2096.2%2011.96%2098.5%2012.01%20100.8%2012.06%20103.1%2012.10%20105.4%2012.14%20107.7%2012.18%20110.0%2012.21%20112.3%2012.23%20114.6%2012.25%20116.9%2012.26%20119.2%2012.27%20121.5%2012.27%20123.8%2012.26%20126.1%2012.24%20128.4%2012.21%20130.7%2012.17%20133.0%2012.12%20135.3%2012.05%20137.6%2011.98%20139.9%2011.89%20142.2%2011.79%20144.5%2011.68%20146.8%2011.55%20149.1%2011.41%20151.3%2011.25%20153.6%2011.07%20155.9%2010.88%20158.1%2010.68%20160.4%2010.45%20162.6%2010.20%20164.8%209.94%20167.1%209.66%20169.3%209.35%20171.5%209.03%20173.7%208.68%20175.9%208.32%20178.0%207.93%20180.2%207.52%20182.4%207.08%20184.5%206.62%20186.6%206.13%20188.8%205.62%20190.9%205.08%20192.9%204.52%20195.0%203.92%20197.1%203.29%20196.9%202.71%20194.8%203.18%20192.7%203.64%20190.6%204.08%20188.5%204.49%20186.4%204.87%20184.2%205.24%20182.1%205.58%20179.9%205.90%20177.8%206.20%20175.6%206.48%20173.4%206.73%20171.2%206.97%20169.0%207.19%20166.8%207.39%20164.6%207.57%20162.4%207.73%20160.1%207.88%20157.9%208.01%20155.7%208.13%20153.4%208.23%20151.2%208.32%20148.9%208.39%20146.6%208.45%20144.4%208.50%20142.1%208.54%20139.8%208.57%20137.5%208.58%20135.3%208.59%20133.0%208.59%20130.7%208.57%20128.4%208.55%20126.1%208.53%20123.8%208.49%20121.5%208.45%20119.2%208.41%20116.9%208.36%20114.6%208.31%20112.3%208.25%20110.0%208.19%20107.7%208.12%20105.5%208.06%20103.2%207.99%20100.9%207.93%2098.6%207.86%2096.3%207.79%2094.0%207.73%2091.7%207.66%2089.5%207.60%2087.2%207.55%2084.9%207.49%2082.7%207.44%2080.4%207.40%2078.2%207.36%2075.9%207.33%2073.7%207.31%2071.5%207.30%2069.2%207.29%2067.0%207.29%2064.8%207.31%2062.6%207.33%2060.4%207.36%2058.3%207.41%2056.1%207.47%2053.9%207.54%2051.8%207.62%2049.6%207.72%2047.5%207.83%2045.4%207.96%2043.3%208.10%2041.2%208.26%2039.1%208.44%2037.1%208.63%2035.0%208.84%2033.0%209.07%2031.0%209.32%2029.0%209.59%2027.0%209.87%2025.0%2010.18%2023.1%2010.51%2021.1%2010.86%2019.2%2011.24%2017.3%2011.63%2015.5%2012.05%2013.6%2012.49%2011.8%2012.96%209.9%2013.46%208.2%2013.98%206.4%2014.52%204.6%2015.10%202.9%2015.71Z%27%2F%3E%3C%2Fsvg%3E");
+  --ink-2: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20200%2020%27%20preserveAspectRatio%3D%27none%27%3E%3Cpath%20d%3D%27M3.1%2011.39L4.5%2011.15%205.9%2010.92%207.3%2010.71%208.7%2010.52%2010.0%2010.34%2011.4%2010.18%2012.7%2010.03%2014.1%209.90%2015.4%209.79%2016.7%209.69%2018.0%209.61%2019.3%209.54%2020.6%209.48%2021.9%209.44%2023.2%209.41%2024.5%209.38%2025.9%209.37%2027.2%209.37%2028.5%209.38%2029.8%209.40%2031.1%209.43%2032.5%209.46%2033.8%209.50%2035.2%209.55%2036.5%209.61%2037.9%209.67%2039.3%209.74%2040.7%209.81%2042.2%209.90%2043.6%209.99%2045.1%2010.07%2046.9%2010.02%2049.1%209.42%2051.1%208.04%2052.5%206.71%2052.7%206.50%2053.1%206.87%2054.7%208.50%2056.7%2010.15%2058.9%2011.05%2060.8%2011.40%2062.6%2011.60%2064.3%2011.76%2066.1%2011.93%2067.9%2012.10%2069.8%2012.27%2071.7%2012.44%2073.6%2012.61%2075.5%2012.78%2077.5%2012.94%2079.5%2013.11%2081.6%2013.28%2083.7%2013.45%2085.8%2013.61%2088.0%2013.77%2090.2%2013.93%2092.4%2014.09%2094.7%2014.24%2097.1%2014.39%2099.5%2014.53%20101.9%2014.66%20104.4%2014.80%20106.9%2014.92%20109.5%2015.04%20112.2%2015.15%20114.8%2015.26%20117.6%2015.35%20120.4%2015.44%20123.2%2015.52%20126.1%2015.59%20129.0%2015.65%20132.1%2015.71%20135.1%2015.75%20138.2%2015.78%20141.4%2015.80%20144.7%2015.80%20148.0%2015.80%20151.4%2015.78%20154.8%2015.75%20158.3%2015.71%20161.8%2015.65%20165.5%2015.58%20169.2%2015.49%20172.9%2015.38%20176.8%2015.27%20180.7%2015.13%20184.7%2014.98%20188.7%2014.81%20192.8%2014.62%20197.0%2014.40%20197.0%2013.60%20192.8%2013.70%20188.7%2013.79%20184.6%2013.87%20180.6%2013.93%20176.7%2013.98%20172.9%2014.01%20169.2%2014.03%20165.5%2014.03%20161.8%2014.02%20158.3%2014.00%20154.8%2013.96%20151.4%2013.92%20148.0%2013.86%20144.7%2013.79%20141.5%2013.70%20138.3%2013.61%20135.2%2013.51%20132.1%2013.40%20129.1%2013.28%20126.2%2013.15%20123.3%2013.01%20120.5%2012.86%20117.7%2012.71%20115.0%2012.55%20112.3%2012.38%20109.7%2012.21%20107.1%2012.03%20104.6%2011.85%20102.1%2011.66%2099.7%2011.47%2097.3%2011.28%2095.0%2011.08%2092.7%2010.88%2090.5%2010.67%2088.3%2010.47%2086.1%2010.26%2084.0%2010.05%2081.9%209.84%2079.8%209.63%2077.8%209.43%2075.9%209.22%2073.9%209.01%2072.0%208.81%2070.1%208.60%2068.3%208.40%2066.5%208.21%2064.7%208.01%2063.0%207.82%2061.3%207.61%2059.9%207.33%2058.7%206.84%2057.5%205.78%2055.8%204.02%2053.0%202.59%2050.1%203.60%2048.4%205.08%2047.4%205.83%2046.5%206.06%2045.3%206.08%2043.9%206.00%2042.4%205.91%2041.0%205.82%2039.5%205.74%2038.1%205.68%2036.7%205.63%2035.3%205.60%2033.9%205.58%2032.5%205.58%2031.1%205.60%2029.8%205.64%2028.4%205.69%2027.1%205.76%2025.7%205.85%2024.4%205.96%2023.0%206.09%2021.7%206.24%2020.4%206.41%2019.0%206.60%2017.7%206.82%2016.4%207.05%2015.0%207.30%2013.7%207.58%2012.4%207.87%2011.0%208.19%209.7%208.53%208.3%208.90%207.0%209.28%205.6%209.70%204.3%2010.14%202.9%2010.61Z%27%2F%3E%3C%2Fsvg%3E");
+  --ink-3: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20200%2020%27%20preserveAspectRatio%3D%27none%27%3E%3Cpath%20d%3D%27M2.9%207.24L4.8%207.79%206.7%208.31%208.7%208.81%2010.6%209.30%2012.6%209.78%2014.5%2010.24%2016.5%2010.69%2018.5%2011.13%2020.6%2011.56%2022.6%2011.98%2024.7%2012.38%2026.7%2012.77%2028.8%2013.15%2030.9%2013.52%2033.0%2013.88%2035.1%2014.22%2037.2%2014.55%2039.4%2014.87%2041.5%2015.18%2043.7%2015.48%2045.9%2015.76%2048.1%2016.03%2050.3%2016.29%2052.5%2016.53%2054.7%2016.77%2056.9%2016.99%2059.1%2017.20%2061.3%2017.39%2063.6%2017.58%2065.8%2017.75%2068.1%2017.90%2070.3%2018.05%2072.6%2018.18%2074.9%2018.30%2077.2%2018.41%2079.4%2018.50%2081.7%2018.58%2084.0%2018.65%2086.3%2018.70%2088.6%2018.74%2090.9%2018.77%2093.2%2018.78%2095.5%2018.79%2097.8%2018.77%20100.1%2018.75%20102.3%2018.71%20104.6%2018.66%20106.9%2018.60%20109.2%2018.52%20111.5%2018.43%20113.8%2018.32%20116.1%2018.20%20118.4%2018.07%20120.7%2017.92%20123.0%2017.76%20125.2%2017.58%20127.5%2017.39%20129.8%2017.18%20132.0%2016.96%20134.3%2016.73%20136.5%2016.48%20138.8%2016.22%20141.0%2015.94%20143.2%2015.65%20145.4%2015.34%20147.7%2015.02%20149.9%2014.69%20152.1%2014.34%20154.2%2013.98%20156.4%2013.61%20158.6%2013.22%20160.7%2012.81%20162.9%2012.40%20165.0%2011.97%20167.1%2011.52%20169.2%2011.07%20171.3%2010.60%20173.4%2010.11%20175.4%209.62%20177.5%209.11%20179.5%208.58%20181.5%208.05%20183.5%207.50%20185.5%206.93%20187.5%206.36%20189.4%205.77%20191.4%205.16%20193.3%204.54%20195.2%203.91%20197.1%203.24%20196.9%202.76%20195.0%203.15%20193.0%203.55%20191.1%203.94%20189.1%204.32%20187.1%204.70%20185.1%205.07%20183.1%205.43%20181.0%205.78%20179.0%206.12%20176.9%206.45%20174.9%206.78%20172.8%207.09%20170.7%207.40%20168.6%207.70%20166.5%207.99%20164.4%208.27%20162.2%208.54%20160.1%208.80%20157.9%209.06%20155.8%209.30%20153.6%209.54%20151.4%209.78%20149.3%2010.00%20147.1%2010.21%20144.9%2010.42%20142.7%2010.62%20140.5%2010.81%20138.2%2011.00%20136.0%2011.17%20133.8%2011.34%20131.6%2011.51%20129.3%2011.66%20127.1%2011.81%20124.8%2011.95%20122.6%2012.08%20120.3%2012.21%20118.1%2012.32%20115.8%2012.43%20113.6%2012.54%20111.3%2012.64%20109.0%2012.72%20106.8%2012.81%20104.5%2012.88%20102.2%2012.94%2099.9%2013.00%2097.7%2013.05%2095.4%2013.09%2093.1%2013.12%2090.9%2013.14%2088.6%2013.16%2086.3%2013.16%2084.1%2013.16%2081.8%2013.15%2079.6%2013.13%2077.3%2013.11%2075.1%2013.07%2072.8%2013.03%2070.6%2012.98%2068.3%2012.92%2066.1%2012.85%2063.9%2012.77%2061.6%2012.68%2059.4%2012.59%2057.2%2012.49%2055.0%2012.37%2052.8%2012.25%2050.6%2012.13%2048.4%2011.99%2046.3%2011.84%2044.1%2011.69%2041.9%2011.52%2039.8%2011.35%2037.7%2011.17%2035.5%2010.98%2033.4%2010.78%2031.3%2010.57%2029.2%2010.35%2027.1%2010.13%2025.0%209.89%2023.0%209.65%2020.9%209.40%2018.9%209.13%2016.9%208.86%2014.8%208.58%2012.8%208.30%2010.9%208.00%208.9%207.70%206.9%207.38%205.0%207.07%203.1%206.76Z%27%2F%3E%3C%2Fsvg%3E");
+  --ink-4: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20200%2020%27%20preserveAspectRatio%3D%27none%27%3E%3Cpath%20d%3D%27M3.1%208.32L5.2%208.11%207.4%207.90%209.6%207.71%2011.7%207.52%2013.9%207.35%2016.0%207.20%2018.2%207.06%2020.3%206.94%2022.5%206.85%2024.6%206.77%2026.8%206.71%2028.9%206.68%2031.1%206.66%2033.2%206.67%2035.3%206.70%2037.5%206.74%2039.6%206.81%2041.7%206.90%2043.9%207.01%2046.0%207.13%2048.1%207.28%2050.3%207.44%2052.4%207.61%2054.6%207.81%2056.7%208.03%2058.8%208.26%2061.0%208.51%2063.1%208.78%2065.3%209.06%2067.4%209.35%2069.6%209.65%2071.7%209.96%2073.9%2010.27%2076.0%2010.60%2078.2%2010.92%2080.3%2011.25%2082.5%2011.57%2084.7%2011.90%2086.8%2012.21%2089.0%2012.53%2091.1%2012.83%2093.3%2013.13%2095.5%2013.42%2097.6%2013.69%2099.8%2013.95%20102.0%2014.19%20104.1%2014.42%20106.3%2014.63%20108.5%2014.82%20110.7%2014.99%20112.8%2015.14%20115.0%2015.27%20117.2%2015.37%20119.3%2015.46%20121.5%2015.51%20123.8%2015.47%20126.3%2014.99%20128.8%2013.70%20130.6%2012.60%20131.8%2012.67%20133.8%2013.85%20136.4%2014.88%20138.8%2015.11%20141.0%2015.02%20143.2%2014.86%20145.4%2014.67%20147.5%2014.47%20149.7%2014.25%20151.8%2014.02%20154.0%2013.77%20156.2%2013.51%20158.3%2013.24%20160.5%2012.95%20162.6%2012.66%20164.8%2012.36%20166.9%2012.06%20169.1%2011.74%20171.2%2011.43%20173.4%2011.12%20175.5%2010.80%20177.7%2010.49%20179.8%2010.18%20182.0%209.88%20184.1%209.58%20186.3%209.29%20188.4%209.00%20190.6%208.73%20192.7%208.46%20194.9%208.21%20197.0%207.96%20197.0%207.27%20194.8%207.42%20192.6%207.59%20190.5%207.77%20188.3%207.97%20186.2%208.18%20184.0%208.39%20181.8%208.62%20179.7%208.86%20177.5%209.10%20175.3%209.34%20173.2%209.59%20171.0%209.84%20168.9%2010.08%20166.7%2010.33%20164.6%2010.57%20162.4%2010.81%20160.2%2011.04%20158.1%2011.26%20155.9%2011.47%20153.8%2011.67%20151.6%2011.86%20149.5%2012.04%20147.3%2012.20%20145.2%2012.34%20143.0%2012.47%20140.9%2012.58%20138.8%2012.61%20136.9%2012.40%20135.2%2011.61%20132.9%2010.25%20129.7%2010.04%20127.3%2011.40%20125.4%2012.35%20123.6%2012.64%20121.6%2012.63%20119.5%2012.54%20117.3%2012.42%20115.2%2012.27%20113.0%2012.11%20110.9%2011.92%20108.8%2011.72%20106.6%2011.50%20104.5%2011.25%20102.3%2011.00%20100.2%2010.73%2098.1%2010.44%2095.9%2010.14%2093.8%209.83%2091.6%209.51%2089.5%209.18%2087.3%208.84%2085.2%208.50%2083.0%208.16%2080.9%207.82%2078.7%207.47%2076.6%207.13%2074.4%206.79%2072.2%206.46%2070.1%206.14%2067.9%205.82%2065.8%205.52%2063.6%205.23%2061.4%204.95%2059.2%204.69%2057.1%204.45%2054.9%204.23%2052.7%204.03%2050.6%203.85%2048.4%203.70%2046.2%203.58%2044.0%203.49%2041.9%203.43%2039.7%203.40%2037.5%203.41%2035.3%203.45%2033.2%203.52%2031.0%203.62%2028.8%203.76%2026.6%203.93%2024.5%204.13%2022.3%204.36%2020.1%204.61%2018.0%204.90%2015.8%205.22%2013.7%205.56%2011.5%205.92%209.4%206.31%207.2%206.73%205.1%207.16%202.9%207.63Z%27%2F%3E%3C%2Fsvg%3E");
+}
+.nav a::after, .btn::after, .filter::after, .tool-btn::after, .chip::after, .p .count::after {
+  content: ""; position: absolute; left: 6px; right: 6px; bottom: 0; height: 14px; pointer-events: none; background: var(--wax);
+  -webkit-mask: var(--ink-1) 0 0 / 100% 100% no-repeat; mask: var(--ink-1) 0 0 / 100% 100% no-repeat;
+  clip-path: inset(0 0 0 100%); transition: clip-path .4s cubic-bezier(.55,0,.25,1);
+}
+[data-ink="2"]::after { -webkit-mask-image: var(--ink-2); mask-image: var(--ink-2); }
+[data-ink="3"]::after { -webkit-mask-image: var(--ink-3); mask-image: var(--ink-3); }
+[data-ink="4"]::after { -webkit-mask-image: var(--ink-4); mask-image: var(--ink-4); }
+.btn::after { left: -2px; right: -2px; }
+.tool-btn::after { left: 7px; right: 7px; bottom: 1px; height: 10px; }
+.nav a:not([aria-current="page"]):hover::after, .nav a:not([aria-current="page"]):focus-visible::after,
+.btn.ghost:hover::after, .btn.ghost:focus-visible::after,
+.filter:not([aria-pressed="true"]):hover::after, .filter:not([aria-pressed="true"]):focus-visible::after,
+.tool-btn:hover::after, .tool-btn:focus-visible::after { clip-path: inset(0); animation: ink-draw .4s cubic-bezier(.55,0,.25,1); }
+@keyframes ink-draw { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0); } }
+.nav a[aria-current="page"]::after, .filter[aria-pressed="true"]::after, .btn:not(.ghost)::after {
+  clip-path: inset(0); background: var(--ink); animation: none;
+}
+.btn:not(.ghost)::after { -webkit-mask-image: var(--ink-3); mask-image: var(--ink-3); }
+.chip::after, .p .count::after { left: 0; right: 0; bottom: -4px; height: 8px; clip-path: inset(0); transition: none; background: var(--ink-faint); }
+.chip.wax::after, .p .count::after { background: var(--wax-line); }
+.chip:nth-child(even)::after { -webkit-mask-image: var(--ink-3); mask-image: var(--ink-3); }
+.p .count::after { bottom: -3px; height: 6px; }
+.chip.ocr::after { /* OCR text: the stroke is broken, as the dashed border was */
+  -webkit-mask: var(--ink-1) 0 0 / 100% 100% no-repeat, repeating-linear-gradient(90deg, #000 0 5px, transparent 5px 8px);
+  mask: var(--ink-1) 0 0 / 100% 100% no-repeat, repeating-linear-gradient(90deg, #000 0 5px, transparent 5px 8px);
+  -webkit-mask-composite: source-in; mask-composite: intersect;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav a::after, .btn::after, .filter::after, .tool-btn::after { transition: none; animation: none !important; }
+}
+
 /* ---------- Toast / errors ---------- */
 .toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 20px); opacity: 0; z-index: 60;
-  background: var(--ink); color: var(--paper); font-family: var(--ui); font-size: var(--step--1); padding: 10px 16px; border-radius: 999px; transition: .3s var(--ease); pointer-events: none; max-width: calc(100vw - 32px); }
+  background: var(--ink); color: var(--paper); font-family: var(--ui); font-size: var(--step--1); padding: 10px 16px; border-radius: var(--radius); transition: .3s var(--ease); pointer-events: none; max-width: calc(100vw - 32px); }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 .error-box { max-width: 60ch; padding: 16px 18px; border: 1px solid var(--wax-line); background: var(--wax-soft); border-radius: var(--radius); font-family: var(--ui); font-size: var(--step--1); }
 
