@@ -1043,7 +1043,7 @@
     document.addEventListener("click", function (e) { if (quoteOpen && !quoteOpen.panel.contains(e.target) && !quoteOpen.btn.contains(e.target)) closeQuote(); }, true);
     // ink-stroke: a fresh quill stroke for each hover or keyboard focus, never the same one twice running
     function inkPick(e) {
-      var el = e.target.closest && e.target.closest(".nav a, .btn.ghost, .filter, .tool-btn");
+      var el = e.target.closest && e.target.closest(".nav a, .btn, .chip, .filter, .tool-btn");
       if (!el || (e.relatedTarget && el.contains(e.relatedTarget))) return;
       if (el.getAttribute("aria-current") === "page" || el.getAttribute("aria-pressed") === "true") return;
       var last = el.getAttribute("data-ink"), n;
